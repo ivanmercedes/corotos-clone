@@ -1,4 +1,5 @@
 const { response } = require("express");
+const slugify = require("slugify");
 const { Category } = require("../models");
 
 // obtener categorias - paginado - total - populate
@@ -7,8 +8,10 @@ const getCategorias = async (req = request, res = response) => {
 
   const [total, categorias] = await Promise.all([
     Category.countDocuments({ status: true }),
-    Category.find({ status: true }).skip(Number(desde)).limit(Number(limit))
-    .populate("subCategory", "name"),
+    Category.find({ status: true })
+      .skip(Number(desde))
+      .limit(Number(limit))
+      .populate("subCategory", "name"),
   ]);
 
   res.json({
@@ -28,15 +31,7 @@ const obtenerCategoria = async (req, res = response) => {
 const crearCategoria = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
 
-  const slug = name
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+  const slug = slugify(name);
 
   const categoriaDB = await Category.findOne({ slug });
 

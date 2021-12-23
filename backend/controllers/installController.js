@@ -1,4 +1,4 @@
-const { Role, User, Category } = require("../models");
+const { Role, User, Category, subCategory } = require("../models");
 const bcryptjs = require("bcryptjs");
 
 const initialDatas = async (req, res = response) => {
@@ -6,8 +6,8 @@ const initialDatas = async (req, res = response) => {
   await Role.insertMany([{ rol: "ADMIN_ROL" }, { rol: "USER_ROL" }]);
 
   const dataUsuario = {
-    name: "Ivan",
-    email: "admin@admin.com",
+    name: "Admin",
+    email: "ivanmercede@gmail.com",
     password: "admin",
     ip: "127.0.0.1",
     rol: "ADMIN_ROL",
@@ -20,7 +20,7 @@ const initialDatas = async (req, res = response) => {
   await usuario.save();
 
   // Creando categorias base
-  const dataCateries = [
+  const dataCategories = [
     {
       name: "Inmuebles en alquiler",
       slug: "inmuebles-en-alquiler",
@@ -66,8 +66,8 @@ const initialDatas = async (req, res = response) => {
     },
   ];
 
-  await Category.insertMany(dataCateries);
- 
+  await Category.insertMany(dataCategories);
+
 
   res.json({ mgs: "Instalado con exito!" });
 };
