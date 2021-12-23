@@ -32,6 +32,7 @@ router.post(
   "/",
   [
     validarJWT,
+    esAdmin,
     check("name", "El nombre es obligatorio").not().isEmpty(),
     validarCampos,
   ],
@@ -43,6 +44,7 @@ router.put(
   "/:id",
   [
     validarJWT,
+    esAdmin,
     check("id", "No es un ID valido").isMongoId(),
     check("name", "El nomre es obligatorio").not().isEmpty(),
     check("id").custom(existeSubCategoriaPorID),

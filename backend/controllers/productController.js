@@ -3,6 +3,10 @@ const { Product } = require("../models");
 const shortid = require("shortid");
 const slugify = require("slugify");
 
+shortid.characters(
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@$",
+);
+
 const getProducts = async (req = request, res = response) => {
   const { limit = 5, desde = 0 } = req.query;
 
@@ -51,15 +55,7 @@ const productUpdate = async (req, res = response) => {
   const { id } = req.params;
   const { status, user, ...data } = req.body;
 
-  data.slug = data.name
-    .toString()
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+  data.slug = slugify(body.name) + `-${shortid.generate()}`;
 
   const product = await Product.findByIdAndUpdate(id, data, { new: true });
 
