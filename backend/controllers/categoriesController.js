@@ -7,11 +7,10 @@ const getCategorias = async (req = request, res = response) => {
 
   const [total, categorias] = await Promise.all([
     Category.countDocuments({ status: true }),
-    Category.find({ status: true })
-      .skip(Number(desde))
-      .limit(Number(limit))
-      .populate("user", "name"),
+    Category.find({ status: true }).skip(Number(desde)).limit(Number(limit))
+    .populate("subCategory", "name"),
   ]);
+
   res.json({
     total,
     categorias,
@@ -21,7 +20,7 @@ const getCategorias = async (req = request, res = response) => {
 // obtener categoria -  populate {}
 const obtenerCategoria = async (req, res = response) => {
   const { id } = req.params;
-  const categoria = await Category.findById(id).populate("user", "name");
+  const categoria = await Category.findById(id);
 
   res.json(categoria);
 };
@@ -29,7 +28,17 @@ const obtenerCategoria = async (req, res = response) => {
 const crearCategoria = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
 
-  const categoriaDB = await Category.findOne({ name });
+  const slug = name
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+
+  const categoriaDB = await Category.findOne({ slug });
 
   if (categoriaDB) {
     res.status(400).json({
@@ -40,6 +49,7 @@ const crearCategoria = async (req, res = response) => {
   // Generar la data a guardar
   const data = {
     name,
+    slug,
     user: req.usuario._id,
   };
 
@@ -75,6 +85,7 @@ const categoriaDelete = async (req, res = response) => {
 
   res.json({ categoria });
 };
+
 module.exports = {
   getCategorias,
   obtenerCategoria,

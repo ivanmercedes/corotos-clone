@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
- 
 
-const CategorySchema = Schema({
+const subCategorySchema = Schema({
   name: {
     type: String,
     required: [true, "El nombre es obligatorio"],
@@ -12,21 +11,21 @@ const CategorySchema = Schema({
     required: [true, "El slug es obligatorio"],
     unique: true,
   },
+  category: {
+    type: Schema.Types.ObjectID,
+    ref: "Category",
+    required: true,
+  },
   status: {
     type: Boolean,
     default: true,
     required: true,
-  },
-  subCategory: [{
-    type: Schema.Types.ObjectId,
-    ref: "subCategory"
-  }]
+  }
 });
 
-CategorySchema.methods.toJSON = function () {
-  const { __v, status, ...category } = this.toObject();
- 
-  return category;
-};
+subCategorySchema.methods.toJSON = function () {
+  const { __v, status, ...subCategory } = this.toObject();
 
-module.exports = model("Category", CategorySchema);
+  return subCategory;
+};
+module.exports = model("subCategory", subCategorySchema);

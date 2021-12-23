@@ -41,7 +41,16 @@ const productCreate = async (req, res = response) => {
   // Generar la data a guardar
   const data = {
     ...body,
-    name: body.name.toUpperCase(),
+    name: body.name,
+    slug: body.name
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, ""),
     user: req.usuario._id,
   };
 
@@ -56,9 +65,15 @@ const productUpdate = async (req, res = response) => {
   const { id } = req.params;
   const { status, user, ...data } = req.body;
 
-  if (data.name) {
-    data.name = data.name.toUpperCase();
-  }
+  data.slug = data.name
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
 
   const product = await Product.findByIdAndUpdate(id, data, { new: true });
 
