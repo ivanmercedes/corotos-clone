@@ -1,5 +1,7 @@
 const { response } = require("express");
 const { Product } = require("../models");
+const shortid = require("shortid");
+const slugify = require("slugify");
 
 const getProducts = async (req = request, res = response) => {
   const { limit = 5, desde = 0 } = req.query;
@@ -30,7 +32,7 @@ const getProduct = async (req, res = response) => {
 const productCreate = async (req, res = response) => {
   const { status, user, ...body } = req.body;
 
-  const productDB = await Product.findOne({ name: body.name.toUpperCase() });
+  const productDB = await Product.findOne({ slug: slugify(body.name)+`-${shortid.generate()}` });
 
   if (productDB) {
     return res.status(400).json({
@@ -42,15 +44,7 @@ const productCreate = async (req, res = response) => {
   const data = {
     ...body,
     name: body.name,
-    slug: body.name
-      .toString()
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w\-]+/g, "")
-      .replace(/\-\-+/g, "-")
-      .replace(/^-+/, "")
-      .replace(/-+$/, ""),
+    slug: slugify(body.name)+`-${shortid.generate()}`,
     user: req.usuario._id,
   };
 
