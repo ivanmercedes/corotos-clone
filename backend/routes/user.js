@@ -17,7 +17,6 @@ const {
   validarCampos,
   validarJWT,
   esAdmin,
-  existenRole,
   tieneRole,
 } = require("../middlewares");
 
@@ -42,7 +41,6 @@ router.post(
     }),
     check("email", "El correo no es valido").isEmail(),
     check("email").custom(emailExiste),
-    existenRole,
     check("rol").custom(esRolValido),
     validarCampos,
   ],

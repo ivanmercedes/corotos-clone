@@ -34,31 +34,9 @@ const tieneRole = (...roles) => {
     next();
   };
 };
-
-const existenRole = async (req, res = response, next) => {
-  const total = await Role.countDocuments();
-
-  if (total === 0) {
-    await Role.insertMany([
-      {
-        rol: "ADMIN_ROL",
-      },
-      {
-        rol: "USER_ROL",
-      },
-    ])
-      .then(function () {
-        console.log("Roles creados");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-  next();
-};
+ 
 
 module.exports = {
   esAdmin,
   tieneRole,
-  existenRole,
 };

@@ -8,7 +8,7 @@ const initialDatas = async (req, res = response) => {
   const dataUsuario = {
     name: "Admin",
     email: "ivanmercede@gmail.com",
-    password: "admin",
+    password: "123456",
     ip: "127.0.0.1",
     rol: "ADMIN_ROL",
   };
@@ -16,7 +16,7 @@ const initialDatas = async (req, res = response) => {
   // Creado usuario inicial
   const usuario = new User(dataUsuario);
   const salt = bcryptjs.genSaltSync();
-  usuario.password = bcryptjs.hashSync(password, salt);
+  usuario.password = bcryptjs.hashSync(dataUsuario.password, salt);
   await usuario.save();
 
   // Creando categorias base
@@ -54,6 +54,7 @@ const initialDatas = async (req, res = response) => {
       slug: "electrónica",
     },
     {
+      name: "Empleo",
       slug: "empleo",
     },
     {

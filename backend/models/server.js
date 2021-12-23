@@ -18,6 +18,7 @@ class Server {
       users: "/api/users",
       search: "/api/search",
       uploads: "/api/uploads",
+      install: "/api/install",
     };
 
     //Conectar a base de datos
@@ -63,6 +64,7 @@ class Server {
     this.app.use(this.paths.search, require("../routes/search"));
     this.app.use(this.paths.products, require("../routes/products"));
     this.app.use(this.paths.uploads, require("../routes/upload"));
+    this.app.use(this.paths.install, require("../routes/install"));
   }
 
   listen() {
