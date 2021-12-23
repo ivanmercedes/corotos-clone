@@ -32,19 +32,11 @@ const getProduct = async (req, res = response) => {
 const productCreate = async (req, res = response) => {
   const { status, user, ...body } = req.body;
 
-  const productDB = await Product.findOne({ slug: slugify(body.name)+`-${shortid.generate()}` });
-
-  if (productDB) {
-    return res.status(400).json({
-      msg: `El producto ${body.name}, ya existe`,
-    });
-  }
-
   // Generar la data a guardar
   const data = {
     ...body,
     name: body.name,
-    slug: slugify(body.name)+`-${shortid.generate()}`,
+    slug: slugify(body.name) + `-${shortid.generate()}`,
     user: req.usuario._id,
   };
 

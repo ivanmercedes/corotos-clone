@@ -39,7 +39,7 @@ router.post(
     check("name", "El nombre es obligatorio").not().isEmpty(),
     check("category", "La categoria es obligatoria").not().isEmpty(),
     check("category", "La categoria no es valida").isMongoId(),
-    check("category").custom(existeCategoriaPorID),
+    // check("category").custom(existeCategoriaPorID),
     validarCampos,
   ],
   productCreate,

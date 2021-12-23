@@ -26,7 +26,6 @@ const uploadFiles = (
       if (err) {
         reject(err);
       }
-
       resolve(nombreTemp);
     });
   });
